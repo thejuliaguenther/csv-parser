@@ -1,14 +1,4 @@
 
-# def combine_double_quotes(line_list):
-#         quote_stack = []
-
-#         for i in xrange(len(line_list)):
-#             if line_list[i][0] == "\"":
-#                 quote_stack.append(i)
-#             if line_list[i][-1] == "\"":
-#                 last_quote = quote_stack.pop()
-#                 line_list[last_quote] = " ,".join(line_list[last_quote:i+1])
-#         return line_list
 
 class csv(object):
     def __init__(self,filename):
@@ -62,7 +52,7 @@ class csv(object):
 
         String: any value of type str, including empty colums denoted by the placeholder " " 
 
-        Numeric: integers, floats, long integers, and complex numbers 
+        Numeric: any value that contains only digits 
         """
 
         for item in self.result_csv[0]:
