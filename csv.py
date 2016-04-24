@@ -34,6 +34,7 @@ class csv(object):
                     self.result_csv.append(combined_line)
                 else:
                     to_add = line_list
+        csv_file.close()
         print closed_quotes
 
         print self.result_csv
