@@ -89,8 +89,15 @@ class csv(object):
         """
 
         for item in self.result_csv[0]:
+            decimal_index = item.find('.')
+            print decimal_index
             if item[1:].isdigit() and (item[0] == '-' or item[0] == '.' or item[0].isdigit()):
                 self.type_list.append("Numeric")
+            if decimal_index != -1 :
+                if item[0] == '-' and (item[1:decimal_index].isdigit() and item[decimal_index+1:].isdigit()):
+                    self.type_list.append("Numeric")
+                if item[0:decimal_index].isdigit() and item[decimal_index+1:].isdigit():
+                    self.type_list.append("Numeric")
             else:
                 self.type_list.append("String")
 
