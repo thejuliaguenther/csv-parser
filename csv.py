@@ -1,24 +1,14 @@
-def combine_double_quotes(line_list, closed_quotes, quote_stack):
-        new_list = []
-        for i in xrange(len(line_list)):
-            if line_list[i][0] == "\"" and line_list[i][-1] != "\"":
-                quote_stack.append(i)
-                continue
-            if line_list[i][-1] == "\"" and quote_stack != []:
-                last_quote = quote_stack.pop()
-                new_list.append(" ".join(line_list[last_quote:i+1]))
-                closed_quotes = True
-            else:
-                new_list.append(line_list[i])
-        if quote_stack != []:
-            closed_quotes = False
-        return new_list, closed_quotes
+
 
 class csv(object):
     def __init__(self,filename):
         self.filename = filename
         self.result_csv = []
         self.type_list = []
+        self.parse_csv(filename)
+
+
+    def parse_csv(self,filename):
 
         csv_file = open(filename)
 
@@ -49,9 +39,21 @@ class csv(object):
 
         print self.result_csv
 
-    #create a stack for 
-
-    
+    def combine_double_quotes(line_list, closed_quotes, quote_stack):
+        new_list = []
+        for i in xrange(len(line_list)):
+            if line_list[i][0] == "\"" and line_list[i][-1] != "\"":
+                quote_stack.append(i)
+                continue
+            if line_list[i][-1] == "\"" and quote_stack != []:
+                last_quote = quote_stack.pop()
+                new_list.append(" ".join(line_list[last_quote:i+1]))
+                closed_quotes = True
+            else:
+                new_list.append(line_list[i])
+        if quote_stack != []:
+            closed_quotes = False
+        return new_list, closed_quotes
 
     def get_cell_value(self,row,col):
         """
@@ -62,8 +64,6 @@ class csv(object):
         """
         return self.result_csv[row][col]
 
-
-        # private method to parse the CSV and create a 
 
     def get_types(self):
         """
