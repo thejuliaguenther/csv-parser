@@ -12,7 +12,7 @@ def combine_double_quotes(line_list, closed_quotes, quote_stack):
                 new_list.append(line_list[i])
         if quote_stack != []:
             closed_quotes = False
-        return new_list
+        return new_list, closed_quotes
 # def combine_double_quotes(line_list, closed_quotes):
 #         quote_stack = []
 #         new_list = []
@@ -53,8 +53,10 @@ class csv(object):
             line_list = line.split(",")
             if closed_quotes == True:
                 quote_stack = []
-                combined_line = combine_double_quotes(line_list, closed_quotes, quote_stack)
+                combined_line, closed_quotes = combine_double_quotes(line_list, closed_quotes, quote_stack)
                 self.result_csv.append(combined_line)
+            else:
+                print "False"
         print closed_quotes
 
         print self.result_csv
