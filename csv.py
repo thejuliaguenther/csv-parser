@@ -1,4 +1,32 @@
-
+def combine_double_quotes(line_list, closed_quotes, quote_stack):
+        new_list = []
+        for i in xrange(len(line_list)):
+            if line_list[i][0] == "\"":
+                quote_stack.append(i)
+                continue
+            if line_list[i][-1] == "\"":
+                last_quote = quote_stack.pop()
+                new_list.append(" ,".join(line_list[last_quote:i+1]))
+                closed_quotes = True
+            else:
+                new_list.append(line_list[i])
+        if quote_stack != []:
+            closed_quotes = False
+        return new_list
+# def combine_double_quotes(line_list, closed_quotes):
+#         quote_stack = []
+#         new_list = []
+#         for i in xrange(len(line_list)):
+#             if line_list[i][0] == "\"":
+#                 quote_stack.append(i)
+#             if line_list[i][-1] == "\"":
+#                 last_quote = quote_stack.pop()
+#                 line_list[last_quote] = " ,".join(line_list[last_quote:i+1])
+#                 line_list.pop(i)
+#                 closed_quotes = True
+#             if quote_stack != []:
+#                 closed_quotes = False
+#         return line_list
 
 class csv(object):
     def __init__(self,filename):
@@ -17,27 +45,23 @@ class csv(object):
         #     self.result_csv.append(line_list)
         # print self.result_csv
 
+        closed_quotes = True
         for line in csv_file:
             # strip the right side 
             line = line.rstrip()
             #split the lines by comma 
             line_list = line.split(",")
-            # combined_line = combine_double_quotes(line_list)
-            self.result_csv.append(line_list)
+            if closed_quotes == True:
+                quote_stack = []
+                combined_line = combine_double_quotes(line_list, closed_quotes, quote_stack)
+                self.result_csv.append(combined_line)
+        print closed_quotes
+
         print self.result_csv
 
     #create a stack for 
 
-    # def combine_double_quotes(line_list):
-    #     quote_stack = []
-
-    #     for i in line_list:
-    #         if line_list[i][0] == "\"":
-    #             quote_stack.append(i)
-    #         if line_list[i][-1] == "\"":
-    #             last_quote = quote_stack.pop()
-    #             line_list[last_quote] = " ".join(line_list[last_quote:i+1])
-    #     return line_list
+    
 
     def get_cell_value(self,row,col):
         """
