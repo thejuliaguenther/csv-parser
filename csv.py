@@ -1,32 +1,18 @@
 def combine_double_quotes(line_list, closed_quotes, quote_stack):
         new_list = []
         for i in xrange(len(line_list)):
-            if line_list[i][0] == "\"":
+            if line_list[i][0] == "\"" and line_list[i][-1] != "\"":
                 quote_stack.append(i)
                 continue
-            if line_list[i][-1] == "\"":
+            if line_list[i][-1] == "\"" and quote_stack != []:
                 last_quote = quote_stack.pop()
-                new_list.append(" ,".join(line_list[last_quote:i+1]))
+                new_list.append(" ".join(line_list[last_quote:i+1]))
                 closed_quotes = True
             else:
                 new_list.append(line_list[i])
         if quote_stack != []:
             closed_quotes = False
         return new_list, closed_quotes
-# def combine_double_quotes(line_list, closed_quotes):
-#         quote_stack = []
-#         new_list = []
-#         for i in xrange(len(line_list)):
-#             if line_list[i][0] == "\"":
-#                 quote_stack.append(i)
-#             if line_list[i][-1] == "\"":
-#                 last_quote = quote_stack.pop()
-#                 line_list[last_quote] = " ,".join(line_list[last_quote:i+1])
-#                 line_list.pop(i)
-#                 closed_quotes = True
-#             if quote_stack != []:
-#                 closed_quotes = False
-#         return line_list
 
 class csv(object):
     def __init__(self,filename):
@@ -51,12 +37,23 @@ class csv(object):
             line = line.rstrip()
             #split the lines by comma 
             line_list = line.split(",")
+            print line_list
             if closed_quotes == True:
                 quote_stack = []
                 combined_line, closed_quotes = combine_double_quotes(line_list, closed_quotes, quote_stack)
-                self.result_csv.append(combined_line)
+                if closed_quotes == True:
+                    self.result_csv.append(combined_line)
+                else:
+                    to_add = line_list
             else:
-                print "False"
+                quote_stack = []
+                to_add.extend(line_list)
+                # print to_add
+                combined_line, closed_quotes = combine_double_quotes(to_add, closed_quotes, quote_stack)
+                if closed_quotes == True:
+                    self.result_csv.append(combined_line)
+                else:
+                    to_add = line_list
         print closed_quotes
 
         print self.result_csv
