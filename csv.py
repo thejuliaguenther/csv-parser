@@ -22,15 +22,6 @@ class csv(object):
 
         csv_file = open(filename)
 
-        # for line in csv_file:
-        #     # strip the right side 
-        #     line = line.rstrip()
-        #     #split the lines by comma 
-        #     line_list = line.split(",")
-        #     # combined_line = combine_double_quotes(line_list)
-        #     self.result_csv.append(line_list)
-        # print self.result_csv
-
         closed_quotes = True
         for line in csv_file:
             # strip the right side 
