@@ -85,7 +85,7 @@ class CSVUnitTests(unittest.TestCase):
         types = new_csv.get_types()
         self.assertEqual(new_csv.type_list, ['String', 'String', 'Numeric'])
 
-    def test_combine_double_quotes(self):
+    def test_combine_double_quotes_split_quotes(self):
         """
         Tests combine_double_quotes on an input file that contains quotes spread 
         across lines
@@ -93,6 +93,13 @@ class CSVUnitTests(unittest.TestCase):
         new_csv = CSV("example2.csv")
         self.assertEqual(new_csv.result_csv, [['"For whom the bells toll"', '0', '0'], ['"Bring me some shrubbery"', '2', '3'], ['"Once upon a time"', '5', '6'], ['"\'It\'s just a flesh wound."', '8', '9']])
 
+    def test_combine_double_quotes_commas(self):
+        """
+        Tests combine_double_quotes on an input file that contains commas, the 
+        delimeter used to split the CSV input file
+        """
+        new_csv = CSV("example.csv")
+        self.assertEqual(new_csv.result_csv,[['John D', '120 any st.', '"Anytown  WW"', '08123'], ['Andrew P', '114 Sansome st.', '"San Francisco  CA"', '94105'], ['Morgan R', '905 Green st.', '"Chicago  IL"', '68100']])
     def test_get_cell_value_normal_input(self):
         """Tests the ability to look up a value at a specified row and column"""
         new_csv = CSV("example.csv")
