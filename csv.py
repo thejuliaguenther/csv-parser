@@ -5,7 +5,7 @@ class CSV(object):
         self.filename = filename
         self.result_csv = []
         self.type_list = []
-        
+
         self.parse_csv(filename)
 
 
@@ -13,6 +13,7 @@ class CSV(object):
         try:
             csv_file = open(filename)
         except IOError:
+            del self
             print "File not found!"
         else:
             closed_quotes = True
@@ -38,12 +39,15 @@ class CSV(object):
                     else:
                         to_add = line_list
             csv_file.close()
-            return self.result_csv
+            print self.result_csv
 
 
     def combine_double_quotes(self,line_list, closed_quotes, quote_stack):
         new_list = []
         for i in xrange(len(line_list)):
+            if line_list[i] == "":
+                new_list.append(line_list[i])
+                continue
             if line_list[i][0] == "\"" and line_list[i][-1] != "\"":
                 quote_stack.append(i)
                 continue
@@ -86,19 +90,25 @@ class CSV(object):
         Numeric: any value that contains only digits or digits plus a negative sign (-) in
         the first index or a decimal point in any index except the last index 
         """
-        # if self.type_list == []:
-        for item in self.result_csv[0]:
-            decimal_index = item.find('.')
-            if item[1:].isdigit() and (item[0] == '-' or item[0] == '.' or item[0].isdigit()):
-                self.type_list.append("Numeric")
-            if decimal_index != -1 :
-                if item[0] == '-' and (item[1:decimal_index].isdigit() and item[decimal_index+1:].isdigit()):
-                    self.type_list.append("Numeric")
-                if item[0:decimal_index].isdigit() and item[decimal_index+1:].isdigit():
-                    self.type_list.append("Numeric")
-            else:
+        if self.type_list == []:
+            if self.result_csv == []:
                 self.type_list.append("String")
-
+            else:
+                for item in self.result_csv[0]:
+                    decimal_index = item.find('.')
+                    if item.isdigit():
+                        self.type_list.append("Numeric")
+                    elif item[1:].isdigit() and (item[0] == '-' or item[0] == '.'):
+                        self.type_list.append("Numeric")
+                    elif decimal_index != -1 :
+                        if item[0] == '-' and (item[1:decimal_index].isdigit() and item[decimal_index+1:].isdigit()):
+                            self.type_list.append("Numeric")
+                        elif item[0:decimal_index].isdigit() and item[decimal_index+1:].isdigit():
+                            self.type_list.append("Numeric")
+                        else:
+                            self.type_list.append("String")
+                    else:
+                        self.type_list.append("String")
         return self.type_list
     
 

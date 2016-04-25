@@ -23,9 +23,56 @@ class CSVUnitTests(unittest.TestCase):
         new_csv = CSV("empty.csv")
         self.assertIsInstance(new_csv,CSV)
 
-    # def test_invalid_filename(self):
-    #     new_csv = CSV("foo.csv")
-    #     self.assertNotIsInstance(new_csv, CSV)  
+    def test_parse_csv_normal_input(self):
+        new_csv = CSV("example.csv")
+        self.assertEqual(new_csv.result_csv, [['John D', '120 any st.', '"Anytown  WW"', '08123'], ['Andrew P', '114 Sansome st.', '"San Francisco  CA"', '94105'], ['Morgan R', '905 Green st.', '"Chicago  IL"', '68100']])
+
+    def test_parse_csv_empty_input(self):
+        new_csv = CSV("empty.csv")
+        self.assertEqual(new_csv.result_csv, [])
+
+    def test_parse_csv_empty_cells(self):
+        new_csv = CSV("empty_cells.csv")
+        self.assertEqual(new_csv.result_csv, [['John D', '', '08123'], ['Andrew P', '', '94105'], ['Morgan R', '', '68100']])
+
+    def test_get_types_normal_input(self):
+        new_csv = CSV("example.csv")
+        types = new_csv.get_types()
+        self.assertEqual(new_csv.type_list, ['String', 'String', 'String', 'Numeric'])
+
+    def test_get_types_empty_input(self):
+        new_csv = CSV("empty.csv")
+        types = new_csv.get_types()
+        self.assertEqual(new_csv.type_list, ['String'])
+
+    def test_get_types_negative_input(self):
+        new_csv = CSV("negative_numbers.csv")
+        types = new_csv.get_types()
+        self.assertEqual(new_csv.type_list, ['String', 'Numeric', 'Numeric'])
+
+    def test_get_types_decimal_input(self):
+        new_csv = CSV("float_numbers.csv")
+        types = new_csv.get_types()
+        self.assertEqual(new_csv.type_list, ['String', 'Numeric', 'Numeric'])
+
+    def test_get_types_empty_cells(self):
+        new_csv = CSV("empty_cells.csv")
+        types = new_csv.get_types()
+        self.assertEqual(new_csv.type_list, ['String', 'String', 'Numeric'])
+
+    def test_combine_double_quotes(self):
+        new_csv = CSV("example2.csv")
+        self.assertEqual(new_csv.result_csv, [['"For whom the bells toll"', '0', '0'], ['"Bring me some shrubbery"', '2', '3'], ['"Once upon a time"', '5', '6'], ['"\'It\'s just a flesh wound."', '8', '9']])
+
+    def test_get_cell_value_normal_input(self):
+        new_csv = CSV("example.csv")
+        value_at_index = new_csv.get_cell_value(1,2)
+        self.assertEqual(value_at_index, '"San Francisco  CA"')
+
+    def test_get_cell_value_empty_cell(self):
+        new_csv = CSV("empty_cells.csv")
+        value_at_index = new_csv.get_cell_value(1,1)
+        self.assertEqual(value_at_index, '')
 
 if __name__ == "__main__":
     unittest.main()
