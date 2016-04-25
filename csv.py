@@ -5,6 +5,7 @@ class CSV(object):
         self.filename = filename
         self.result_csv = []
         self.type_list = []
+        
         self.parse_csv(filename)
 
 
@@ -37,7 +38,7 @@ class CSV(object):
                     else:
                         to_add = line_list
             csv_file.close()
-            print self.result_csv
+            return self.result_csv
 
 
     def combine_double_quotes(self,line_list, closed_quotes, quote_stack):
