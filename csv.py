@@ -20,27 +20,24 @@ class CSV(object):
                 line = line.rstrip()
                 #split the lines by comma 
                 line_list = line.split(",")
-                print line_list
-                self.add_line_to_output(closed_quotes,line_list)
-        csv_file.close()
-        return self.result_csv
-
-    def add_line_to_output(self, closed_quotes, line_list):
-        if closed_quotes == True:
-            quote_stack = []
-            combined_line, closed_quotes = self.combine_double_quotes(line_list, closed_quotes, quote_stack)
-            if closed_quotes == True:
-                self.result_csv.append(combined_line)
-            else:
-                to_add = line_list
-        else:
-            quote_stack = []
-            to_add.extend(line_list)
-            combined_line, closed_quotes = self.combine_double_quotes(to_add, closed_quotes, quote_stack)
-            if closed_quotes == True:
-                self.result_csv.append(combined_line)
-            else:
-                to_add = line_list
+                
+                if closed_quotes == True:
+                    quote_stack = []
+                    combined_line, closed_quotes = self.combine_double_quotes(line_list, closed_quotes, quote_stack)
+                    if closed_quotes == True:
+                        self.result_csv.append(combined_line)
+                    else:
+                        to_add = line_list
+                else:
+                    quote_stack = []
+                    to_add.extend(line_list)
+                    combined_line, closed_quotes = self.combine_double_quotes(to_add, closed_quotes, quote_stack)
+                    if closed_quotes == True:
+                        self.result_csv.append(combined_line)
+                    else:
+                        to_add = line_list
+            csv_file.close()
+            print self.result_csv
 
 
     def combine_double_quotes(self,line_list, closed_quotes, quote_stack):
@@ -88,7 +85,7 @@ class CSV(object):
         Numeric: any value that contains only digits or digits plus a negative sign (-) in
         the first index or a decimal point in any index except the last index 
         """
-
+        # if self.type_list == []:
         for item in self.result_csv[0]:
             decimal_index = item.find('.')
             if item[1:].isdigit() and (item[0] == '-' or item[0] == '.' or item[0].isdigit()):
